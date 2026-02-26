@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  # Брокер сообщений (Почтальон)
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    ports:
+      - "1883:1883" # Порт для MQTT
+      - "9001:9001" # Порт для WebSocket (пригодится позже)
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: smarthome_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+  # В будущем сюда добавим контейнеры для NestJS и Postgres
